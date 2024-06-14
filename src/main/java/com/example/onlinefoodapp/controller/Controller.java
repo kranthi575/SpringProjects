@@ -3,9 +3,10 @@ package com.example.onlinefoodapp.controller;
 import com.example.onlinefoodapp.model.UserLogin;
 import com.example.onlinefoodapp.model.UserRegister;
 import com.example.onlinefoodapp.services.IRegisterUser;
-import com.example.onlinefoodapp.services.IUserLogin;
+import com.example.onlinefoodapp.services.IValidateLogin;
+import com.example.onlinefoodapp.services.RegisterUserSrv;
+import com.example.onlinefoodapp.services.ValidateLoginSrv;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,28 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("")
 public class Controller {
 
-  private final  IRegisterUser registerUserSrv;
-  private final IUserLogin userLogin;
+
+  private IRegisterUser registerUserSrv;
+  private  IValidateLogin validateLoginSrv;
 
   @Autowired
-    public Controller(IRegisterUser registerUserSrv,IUserLogin userLogin) {
-        this.registerUserSrv = registerUserSrv;
-        this.userLogin=userLogin;
-    }
+  public Controller(RegisterUserSrv registerUserSrv,ValidateLoginSrv validateLoginSrv){
 
-
-
-    @PostMapping("/login")
-    public ResponseEntity<UserLogin>  login(@RequestBody UserLogin user){
-
-        System.out.println("Data from react app:");
-        System.out.println("Usrname from react app:"+user.getUserName());
-        System.out.println("UserPasswprd from react app,"+user.getUserPassword());
-
-        return userLogin.validateUser(user)
-                .map(user1-> new ResponseEntity(user1, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+      this.registerUserSrv=registerUserSrv;
+      this.validateLoginSrv=validateLoginSrv;
   }
+
 
     @PostMapping("/register")
     public String register(@RequestBody UserRegister userRegister){
@@ -47,5 +37,18 @@ public class Controller {
         System.out.println("UserPhone"+userRegister.getPhone());
 
         return registerUserSrv.registerUser(userRegister);
+    }
+
+    @PostMapping("/login")
+    public String validateLogin(@RequestBody UserLogin userLogin){
+
+
+      System.out.println("UserLogin::Data");
+      System.out.println("UserName:"+userLogin.getUserName());
+      System.out.println("UserPassword:"+userLogin.getUserPassword());
+
+      String validateMsg=validateLoginSrv.validateLoginUser(userLogin);
+      System.out.println(validateMsg);
+      return validateMsg;
     }
 }
