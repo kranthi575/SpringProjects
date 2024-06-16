@@ -17,9 +17,9 @@ public class RegisterUserSrv implements IRegisterUser{
     }
 
     @Override
-    public String registerUser(UserRegister userRegister) {
+    public UserRegister registerUser(UserRegister userRegister) {
         System.out.println("RegisterUSer service");
-       System.out.println(registerUserRepo.save(userRegister));
-        return "User registered successfully!!";
+        UserRegister userRegister1=registerUserRepo.save(userRegister);
+        return userRegister1;
     }
 }

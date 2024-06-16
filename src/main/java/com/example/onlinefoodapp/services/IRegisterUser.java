@@ -4,6 +4,6 @@ import com.example.onlinefoodapp.model.UserRegister;
 
 public interface IRegisterUser {
 
-    public String registerUser(UserRegister userRegister);
+    public UserRegister registerUser(UserRegister userRegister);
 
 }
