@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:1234/" ,allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:1234/" )
 @RequestMapping("")
 public class Controller {
 
@@ -28,7 +28,7 @@ public class Controller {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegister userRegister){
+    public String register(@RequestBody UserRegister userRegister){
 
         System.out.println("Data from React app::");
         System.out.println("UserName:"+userRegister.getName());
@@ -36,11 +36,12 @@ public class Controller {
         System.out.println("UserPassword"+userRegister.getPassword());
         System.out.println("UserPhone"+userRegister.getPhone());
         UserRegister userReg=registerUserSrv.registerUser(userRegister);
-        if(userReg!=null){
-        return ResponseEntity.ok("Registered successfully! Redirecting to login page.");
-        } else {
-            return ResponseEntity.badRequest().body("Registration failed.");
-        }
+        return "registered successfully!";
+//        if(userReg!=null){
+//        return ResponseEntity.ok("Registered successfully! Redirecting to login page.");
+//        } else {
+//            return ResponseEntity.badRequest().body("Registration failed.");
+//        }
     }
 
     @PostMapping("/login")
